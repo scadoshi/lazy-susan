@@ -1,28 +1,11 @@
 # Hand-coding rules
 
-lazy-susan exists so Scotty learns the math and the Rust by writing it. A working program written by someone else would defeat the point, so these rules hold for any AI working in this repo, on stream or off.
+Scotty writes every line of Rust here. AI can explain, ask questions, hint and review, but it doesn't write or edit the code. Showing general Rust that isn't the answer is fine.
 
-## Scotty writes the code
+When something's stuck, hints go up one step at a time, and only after a real try: a question, then the idea or something to read, then where the problem is, then the fix in words. Asking for the answer outright skips straight to the fix in words.
 
-- AI never writes, edits or generates Rust in this repo: no code blocks of the thing being built, no edits to `src/` or `tests/`, no "here's the function".
-- General Rust that isn't the answer is fine to show: how `matches!` works, what `chars()` returns, the shape of a `match` on a tuple.
-- Docs, plans and notes in `context/` can be edited when Scotty asks.
+Before coding a stream, ask its questions from `plan.md`, one at a time.
 
-## Hints climb one rung at a time
+Reviewing finished code is welcome. Point out bugs the same way, as hints.
 
-When something's stuck, start at the bottom, and only move up after a real try at the rung below:
-
-1. A question that points at the problem.
-2. The concept involved, or a page to read.
-3. The line or function where it lives.
-4. The fix, described in words.
-
-If Scotty asks outright for the answer, go to rung 4, in words, and say that's what it was.
-
-## Before each block, questions
-
-Every stream in `context/plan.md` has questions to answer out loud before coding. Ask them. If one can't be answered yet, that's the thing to read about, before any code.
-
-## Reviewing is allowed
-
-Once Scotty has written something, AI can review it: point out bugs (as hints, climbing the same ladder), naming, missing tests, and anything against the comment or commit rules. Reviewing a finished checkpoint in full is fine.
+Keep it short. One nudge at a time, a sentence or two, not a lecture.

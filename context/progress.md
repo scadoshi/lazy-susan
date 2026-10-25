@@ -1,6 +1,6 @@
 # Progress
 
-## Stream 1: reading the art
+## 1. Reading the art
 
 - [ ] `cargo init --lib`, lib and bin in one package
 - [ ] Lint policy copied from chickadee, casting and indexing decided and written down
@@ -8,7 +8,7 @@
 - [ ] Binary prints art back flat
 - [ ] Checkpoint: Z and S print flat, shadows gone
 
-## Stream 2: art into a solid
+## 2. Art into a solid
 
 - [ ] `SurfacePoint`
 - [ ] Front and back faces
@@ -16,7 +16,7 @@
 - [ ] Tests: everything fits in -1 to 1, walls face empty cells
 - [ ] Checkpoint: tests pass, point count checked on paper
 
-## Stream 3: rotation and the first spin
+## 3. The first spin
 
 - [ ] Matrix type with quarter-turn tests
 - [ ] `Spin`: turntable and tumble
@@ -24,7 +24,7 @@
 - [ ] Terminal loop
 - [ ] Checkpoint: the Z spins, clip recorded
 
-## Stream 4: making it a library
+## 4. A real library
 
 - [ ] `Renderer` with defaults
 - [ ] `cli` feature
@@ -32,7 +32,7 @@
 - [ ] Docs, README gif, CI
 - [ ] Checkpoint: the S spins, CI green, `v0.1.0`
 
-## Stream 5: the S on scottyfermo.com
+## 5. The S on scottyfermo.com
 
 - [ ] Design settled
 - [ ] `SpinningLogo` component
