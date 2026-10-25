@@ -1,6 +1,6 @@
 # Hand-coding rules
 
-lazysusan exists so Scotty learns the math and the Rust by writing it. A working program written by someone else would defeat the point, so these rules hold for any AI working in this repo, on stream or off.
+lazy-susan exists so Scotty learns the math and the Rust by writing it. A working program written by someone else would defeat the point, so these rules hold for any AI working in this repo, on stream or off.
 
 ## Scotty writes the code
 

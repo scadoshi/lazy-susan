@@ -1,6 +1,6 @@
 # Plan
 
-Five streams take lazysusan from an empty folder to a library that spins any block art, in a terminal or a browser. Each stream is about two hours and ends on something you can see. Solo sessions between streams pick up wherever the last one stopped.
+Five streams take lazy-susan from an empty folder to a library that spins any block art, in a terminal or a browser. Each stream is about two hours and ends on something you can see. Solo sessions between streams pick up wherever the last one stopped.
 
 ## How a session runs
 
@@ -54,6 +54,7 @@ The library takes art in and gives a frame of text back. Everything about time a
 - Each row of `art/z.txt` starts with `▎▎`. Is that part of the letter? What does it turn into once the letter is a real 3D solid?
 - A terminal cell is about twice as tall as wide. If a cell is 1 wide, how tall is it?
 - What should the library know about the terminal? What should the binary know about the math?
+- The package is `lazy-susan`, but the binary imports it as `lazy_susan`. Why the underscore?
 - chickadee denies `indexing_slicing` and warns on `as` casts, and CI treats warnings as errors. Projection is all float-to-cell casts and grid lookups. Keep the rules and work around them, or allow some of them on purpose? What's the cost either way?
 
 **Build**
@@ -153,7 +154,7 @@ The library takes art in and gives a frame of text back. Everything about time a
 
 ## Stream 5: the S on scottyfermo.com
 
-**Goal:** lazysusan running in the browser, spinning the S on the portfolio.
+**Goal:** lazy-susan running in the browser, spinning the S on the portfolio.
 
 Settle the design before this stream: where it sits, how big, whether it replaces the navbar S or lives in the hero. Visitors who ask for reduced motion get a still frame.
 
@@ -167,7 +168,7 @@ Settle the design before this stream: where it sits, how big, whether it replace
 - How many points can a phone afford per frame? How do you thin them out?
 - How does the page know the visitor asked for reduced motion?
 
-**Build:** lazysusan as a git dependency with `default-features = false`, a `SpinningLogo` component that renders `frame()` into a `<pre>`, a small fixed size, and a still frame for reduced motion.
+**Build:** lazy-susan as a git dependency with `default-features = false`, a `SpinningLogo` component that renders `frame()` into a `<pre>`, a small fixed size, and a still frame for reduced motion.
 
 **Checkpoint:** the S spins in `dx serve`, and holds still with reduced motion on.
 
