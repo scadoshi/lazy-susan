@@ -27,17 +27,6 @@ src/main.rs   the terminal binary: reads a file, loops, prints
 
 The library takes art in and gives a frame of text back. Everything about time and the terminal lives in the binary, so a web page can drive the same library later.
 
-## Words you'll use
-
-- **Cell:** one character of the art. About twice as tall as it is wide.
-- **Surface point:** a point on the solid's skin, plus its normal.
-- **Normal:** the direction a surface faces, length 1. Lighting is the normal against the light.
-- **Projection:** 3D to 2D. Divide by depth so far things shrink: x' = K1·x / (K2 + z).
-- **ooz:** one over z. Bigger means closer. Stored in the z-buffer.
-- **Z-buffer:** per screen cell, the closest ooz so far. A point only draws if it's closer.
-- **Ramp:** characters from dark to bright. `░▒▓█` here, `.,-~:;=!*#$@` for the donut.
-- **Turntable and tumble:** turning around the vertical axis (readable) versus around two axes at once (the donut).
-
 ---
 
 ## Stream 1: reading the art
@@ -46,16 +35,13 @@ The library takes art in and gives a frame of text back. Everything about time a
 
 **Read**
 - The Cargo book, "Package Layout": a lib and a bin in one package. doc.rust-lang.org/cargo/guide/project-layout.html
-- The Rust book, "Storing UTF-8 Encoded Text with Strings", the part about bytes versus chars. doc.rust-lang.org/book/ch08-02-strings.html
 - Clippy's docs for `as_conversions`, `indexing_slicing` and `cast_possible_truncation`. clippy.rust-lang.org/
 
 **Questions**
-- `▉` looks like one character. How many bytes is it? What does `line.len()` give you versus `line.chars().count()`?
-- Each row of `art/z.txt` starts with `▎▎`. Is that part of the letter? What does it turn into once the letter is a real 3D solid?
-- A terminal cell is about twice as tall as wide. If a cell is 1 wide, how tall is it?
-- What should the library know about the terminal? What should the binary know about the math?
-- The package is `lazy-susan`, but the binary imports it as `lazy_susan`. Why the underscore?
-- chickadee denies `indexing_slicing` and warns on `as` casts, and CI treats warnings as errors. Projection is all float-to-cell casts and grid lookups. Keep the rules and work around them, or allow some of them on purpose? What's the cost either way?
+- `cells()` gives back ragged rows. Pad to a rectangle, keep `Vec<Vec<bool>>`, or go flat with a width? Follow each choice into the neighbor lookups in Stream 2 and the centering math before picking.
+- Does the library take `&str`, a path, or `impl Read`? Stream 5 runs in a browser with no filesystem; let that decide.
+- Projection is float-to-cell casts and grid writes every frame. Which of chickadee's lints do you relax for the whole crate, which with a targeted `#[allow]`, and what invariant makes each cast safe? Write the invariant where the allow goes.
+- Solid is `▉` and `█` today. Hard-code it or make it a parameter, and what does that decide about who the library is for?
 
 **Build**
 1. `cargo init --lib` in this folder, then add `src/main.rs` beside `src/lib.rs`.
@@ -65,7 +51,7 @@ The library takes art in and gives a frame of text back. Everything about time a
 
 **Checkpoint:** every file in `art/` prints back flat with the shadows gone. The single letters are the easy case; the wordmarks have rows of different lengths and tails that hang below the line. Commit.
 
-**You'll own:** lib versus bin, chars versus bytes, `include_str!` versus reading a file, your first lint policy.
+**You'll own:** lib versus bin, an input API that works without a filesystem, your first lint policy.
 
 ---
 
@@ -75,16 +61,12 @@ The library takes art in and gives a frame of text back. Everything about time a
 
 **Read**
 - Andy Sloane's "Donut math", the part on surface normals and lighting. a1k0n.net/2011/07/20/donut-math.html
-- Then picture a sugar cube on the table. Name the direction each face points.
 
 **Questions**
-- The art is `cols` wide and `rows × 2` tall. How do you move its middle to (0, 0) and fit the larger side into -1 to 1? Which way does y go, and which way do you want it to go?
-- Two solid cells sit side by side. Is there a wall between them? How does the grid tell you?
-- What's the normal of the front face? The back? A left wall? A top wall?
-- If face points sit exactly on cell edges, neighbors double up. Where should they sit instead?
-- The edge of the grid counts as what: solid or empty?
-- `cairn.txt` has `▉▉▎▉▉`, a shadow between two solid cells. What does that gap become in 3D?
-- `zervice.txt` is about 60 cells wide and 7 tall. What does fitting the larger side do to how tall it looks?
+- How far apart should points be? Too far and the letter shows holes up close, too close and you burn time. Work out the largest spacing that still lands a point in every screen cell, from the frame size and K1, instead of guessing.
+- A point cloud redraws every point every frame. The other way is filling each face as a quad per frame. Estimate both for `zervice.txt` at 160×48 and say which you'd pick if this had to run on a phone.
+- Cells are 1×2 and the screen doubles x. Where does the aspect correction live: in the solid, in the projection, or split? What does the letter look like if it's applied twice, or not at all?
+- `cairn.txt`'s `▉▉▎▉▉` gap gives two walls facing each other one cell apart. At what angles can you see both, and what does the z-buffer do with them?
 
 **Build**
 1. `SurfacePoint { point: [f32; 3], normal: [f32; 3] }`.
@@ -107,12 +89,11 @@ The library takes art in and gives a frame of text back. Everything about time a
 - Look back at the donut's long rotation formula in torust and find the matrices hiding in it.
 
 **Questions**
-- Write the x-axis rotation matrix from memory. Where do sin and cos go?
-- Rotate around x then z, or z then x. Same result? When you multiply two matrices, which one applies first?
-- A letter tumbling like the donut is unreadable half the time. Which one axis keeps it readable? What does a small fixed tilt add?
-- Why do normals get the same rotation as the points?
-- A point whose normal faces away from you after rotating: draw it or skip it? Which number tells you?
-- With indexing denied, how do you write to `buffer[y][x]`? And does that remove the need for a bounds check before the cast? (What does `-3.0_f32 as usize` give you?)
+- Derive the y-axis matrix from the x one, then check its signs against the right-hand rule. Why is y the axis where the sign flips, and how would you catch it in a test?
+- Is the donut's tumble Rz·Rx or Rx·Rz? Prove it with one vector through both, not by matching the article.
+- Normals are supposed to transform by the inverse transpose. Why can you skip that here, and what change to the model would make you need it?
+- Culling on the sign of the normal's z is exact for an orthographic camera, not a perspective one. What's the right test with perspective, and how wrong is the shortcut at K2 = 5?
+- With indexing denied: nested `get_mut` or a flat buffer at `y * width + x`? And what does `-3.0_f32 as usize` do to a bounds check written after the cast?
 
 **Build**
 1. A small matrix type in `src/render.rs`: rotations around x, y and z, `multiply`, `apply`. Test quarter turns: rotating y around x a quarter turn gives z.
@@ -137,10 +118,10 @@ The library takes art in and gives a frame of text back. Everything about time a
 - chickadee's `.github/workflows/ci.yml`.
 
 **Questions**
-- What does a caller have to pass, and what should have a default?
-- The terminal-size crate means nothing in a browser. How does the library avoid depending on it?
-- Should `frame` take time in seconds or a frame number? Which is easier for a web page that redraws whenever it gets the chance?
-- What in the public API would be painful to change later?
+- `frame()` allocates two buffers per call. Who owns them: the caller, the `Renderer`, or `frame` itself? Price each one at 30 frames a second in a browser.
+- Where does a frame's time actually go? Measure before touching it, then pick the cheapest real win: cull earlier, thin the points, or cache more of the rotation.
+- Seconds, frame number, or the caller passes the rotation itself: which API survives adding drag-to-spin later without a breaking change?
+- After `v0.1.0`, what would be a breaking change, and what should stay private so it never has to be one?
 
 **Build**
 1. `Renderer { width, height, spin, ramp, light }` with `Renderer::new(width, height)` setting sane defaults.
@@ -166,9 +147,10 @@ Settle the design before this stream: where it sits, how big, whether it replace
 - MDN, `prefers-reduced-motion`.
 
 **Questions**
-- How does a component redraw about 30 times a second without a `sleep` loop?
-- How many points can a phone afford per frame? How do you thin them out?
-- How does the page know the visitor asked for reduced motion?
+- `requestAnimationFrame` or a fixed timer through Dioxus: which one stops when the tab is hidden, and which one fights the browser's own frame timing?
+- Swapping a whole `<pre>`'s text 30 times a second: actually expensive, or fine? Find out with the browser's profiler instead of guessing.
+- What does the library add to the wasm bundle, and what would you cut first if it's too much?
+- Reduced motion shows a still frame. Which angle, and why that one?
 
 **Build:** lazy-susan as a git dependency with `default-features = false`, a `SpinningLogo` component that renders `frame()` into a `<pre>`, a small fixed size, and a still frame for reduced motion.
 
