@@ -45,8 +45,8 @@ The library takes art in and gives a frame of text back. Everything about time a
 
 **Build**
 1. `cargo init --lib` in this folder, then add `src/main.rs` beside `src/lib.rs`.
-2. Copy chickadee's `[lints.clippy]` block into `Cargo.toml`, then make the call from the last question and write the reason down as a comment.
-3. `cells(art: &str) -> Vec<Vec<bool>>` in `src/grid.rs`: only `▉` and `█` are solid. Test a two-line string first, then `art/z.txt`, with the solid cells counted by hand.
+2. Copy chickadee's `[lints.clippy]` block into `Cargo.toml`, then make the lint call from the questions and write the reason down as a comment.
+3. The grid reader in `src/grid.rs`, shaped by your answers on layout, input and the solid set. Test a two-line string first, then `art/z.txt`, with the solid cells counted by hand.
 4. The binary reads a file path from its arguments and prints the grid back flat, `#` for solid and a space for empty.
 
 **Checkpoint:** every file in `art/` prints back flat with the shadows gone. The single letters are the easy case; the wordmarks have rows of different lengths and tails that hang below the line. Commit.
