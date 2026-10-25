@@ -34,4 +34,10 @@ Not started. The plan is in `context/plan.md` and progress is tracked in `contex
 
 ## Art
 
-`art/z.txt` is the Z from [Zwipe](https://zwipe.net) and `art/s.txt` is the S from scottyfermo.com. Any text file works: `▉` and `█` count as solid, everything else is empty space.
+Test art, all from other projects:
+
+- `z.txt`, `zwipe.txt`, `zwiper.txt`, `zerver.txt`, `zervice.txt`: the logo and wordmarks of [Zwipe](https://zwipe.net), its app, its API server and its nightly card sync
+- `c.txt` and `cairn.txt`: [cairn](https://github.com/scadoshi/cairn)'s mark and wordmark
+- `s.txt`: the S from [scottyfermo.com](https://scottyfermo.com)
+
+Any text file works: `▉` and `█` count as solid, everything else is empty space.

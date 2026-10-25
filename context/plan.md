@@ -63,7 +63,7 @@ The library takes art in and gives a frame of text back. Everything about time a
 3. `cells(art: &str) -> Vec<Vec<bool>>` in `src/grid.rs`: only `▉` and `█` are solid. Test a two-line string first, then `art/z.txt`, with the solid cells counted by hand.
 4. The binary reads a file path from its arguments and prints the grid back flat, `#` for solid and a space for empty.
 
-**Checkpoint:** `cargo run -- art/z.txt` and `cargo run -- art/s.txt` print both letters flat with the shadows gone. Commit.
+**Checkpoint:** every file in `art/` prints back flat with the shadows gone. The single letters are the easy case; the wordmarks have rows of different lengths and tails that hang below the line. Commit.
 
 **You'll own:** lib versus bin, chars versus bytes, `include_str!` versus reading a file, your first lint policy.
 
@@ -83,6 +83,8 @@ The library takes art in and gives a frame of text back. Everything about time a
 - What's the normal of the front face? The back? A left wall? A top wall?
 - If face points sit exactly on cell edges, neighbors double up. Where should they sit instead?
 - The edge of the grid counts as what: solid or empty?
+- `cairn.txt` has `▉▉▎▉▉`, a shadow between two solid cells. What does that gap become in 3D?
+- `zervice.txt` is about 60 cells wide and 7 tall. What does fitting the larger side do to how tall it looks?
 
 **Build**
 1. `SurfacePoint { point: [f32; 3], normal: [f32; 3] }`.
