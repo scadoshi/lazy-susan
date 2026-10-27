@@ -1,6 +1,6 @@
 # Plan
 
-Five streams, from an empty folder to a library that spins any block art in a terminal or a browser. Each one ends on something you can run. Solo sessions pick up wherever the last one stopped.
+Six streams, from an empty folder to a library that spins any block art in a terminal, a Ratatui app or a browser. Each one ends on something you can run. Solo sessions pick up wherever the last one stopped.
 
 Every session goes the same way: recap what landed, read, answer the questions out loud, build, and commit at the checkpoint. Stuck gets a hint, not an answer (`rules/hand-coding.md`).
 
@@ -67,7 +67,21 @@ Build: a `Renderer` with defaults, terminal crates behind a `cli` feature, a few
 
 Done when the S spins, CI is green, and `v0.1.0` is tagged.
 
-## 5. The S on scottyfermo.com
+## 5. A Ratatui widget
+
+The spin as a widget any Ratatui app can drop in, and a clip worth sharing.
+
+Read Ratatui's `Widget` and `StatefulWidget` docs, and how `Buffer` and `Rect` fit together.
+
+- `Widget` or `StatefulWidget`? Where does the angle live between frames?
+- `frame()` fills the whole terminal today. What changes when it has to fit any `Rect`, even a tiny one?
+- Ratatui cells carry a style. Does the ramp stay characters, or does brightness become color?
+
+Build: a `ratatui` feature, the widget, an example app with the spin next to some text, and a gif.
+
+Done when `cargo run --example ratatui` spins inside a layout and the README shows it. Then post it and tag `#ratatui`.
+
+## 6. The S on scottyfermo.com
 
 lazy-susan in the browser. Decide where it sits and how big before this one.
 

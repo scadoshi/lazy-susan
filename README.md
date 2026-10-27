@@ -30,7 +30,8 @@ Not started. The plan is in `context/plan.md` and progress is tracked in `contex
 2. Turn each cell into a small block with front, back and side walls
 3. Rotate it with matrices and draw it with a z-buffer and a light
 4. Package it as a library with a thin terminal binary: `lazy-susan art/z.txt`
-5. Run the same library in a browser to spin the S on [scottyfermo.com](https://scottyfermo.com)
+5. Wrap it as a [Ratatui](https://ratatui.rs) widget any terminal app can drop in
+6. Run the same library in a browser to spin the S on [scottyfermo.com](https://scottyfermo.com)
 
 ## Art
 

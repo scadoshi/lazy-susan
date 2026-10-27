@@ -32,7 +32,14 @@
 - [ ] Docs, README gif, CI
 - [ ] Checkpoint: the S spins, CI green, `v0.1.0`
 
-## 5. The S on scottyfermo.com
+## 5. A Ratatui widget
+
+- [ ] `ratatui` feature
+- [ ] Widget, sized to any `Rect`
+- [ ] Example app with the spin in a layout
+- [ ] Checkpoint: example spins, gif in the README, posted with `#ratatui`
+
+## 6. The S on scottyfermo.com
 
 - [ ] Design settled
 - [ ] `SpinningLogo` component
