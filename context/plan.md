@@ -26,13 +26,25 @@ The library turns art into a frame of text. The binary owns the terminal and the
 
 A library that reads art into solid and empty cells, and a binary that prints it back.
 
+Where it fits: everything after this reads your grid. Stream 2 asks it "is the cell next to me solid?" for every cell and every side, so the edges have to be safe.
+
 Read Cargo's [Package Layout](https://doc.rust-lang.org/cargo/guide/project-layout.html), and what clippy says about `as_conversions` and `indexing_slicing`.
 
 - Ragged rows, padded rows, or one flat `Vec`? Pick by what Stream 2's neighbor checks will need.
 - Stream 5 has no filesystem. Does the library take a `&str` or a path?
 - Which of chickadee's lints do you relax, and where? Write the reason next to it.
 
-Build: `cargo init --lib`, add `main.rs`, copy chickadee's lints, write the grid reader with tests, print it back.
+Worksheet. Each step ends on something you can check.
+
+1. `cargo init --lib`, then add `src/main.rs`. Check: `cargo run` and `cargo test` both run.
+2. Copy the `[lints]` block from chickadee's `Cargo.toml`. Run clippy on the empty crate. Decide what happens to `as_conversions` and `indexing_slicing`, and write the reason in a comment beside each. Check: clippy is clean.
+3. Make `src/grid.rs`. Decide what a cell is: what can it be, and does the type say so? Check: it compiles and `lib.rs` exposes it.
+4. Pick the grid's shape (ragged, padded or flat) and write one line on why. Check: you can say how wide and how tall the grid is without walking it.
+5. Write the reader: art text in, grid out. `▉` is solid, `▎` and spaces are empty. Decide what any other character does. Check: it compiles.
+6. Write the lookup that answers "is (x, y) solid?". Off the edge, including past the end of a short row, it answers instead of panicking. Check: tests for inside, past a short row, and below the last row.
+7. Test the reader on a tiny string you write by hand, then on `art/z.txt`. Check: the cell counts match what you count by eye.
+8. The binary takes a path, reads the file, and prints the grid back with one character for solid and a space for empty. Check: `cargo run -- art/z.txt` prints a flat Z.
+9. Run it on every file in `art/`, then commit. Check: nothing has a shadow and nothing panics.
 
 Done when every file in `art/` prints flat with the shadows gone.
 
@@ -41,6 +53,8 @@ Schedule: setup and tour of `art/` 10 min, read 20, questions 15, build 70, comm
 ## 2. Art into a solid
 
 Every solid cell becomes a small block of points that know which way they face.
+
+Where it fits: this turns the flat grid into 3D points with a facing direction. Stream 3 spins those points and uses the facing to decide how bright each one is.
 
 Read the normals part of [Donut math](https://www.a1k0n.net/2011/07/20/donut-math.html).
 
@@ -58,6 +72,8 @@ Schedule: recap 5 min, read 15, questions 20 with paper, build 75, commit 5.
 
 The Z spinning in the terminal.
 
+Where it fits: this is where points become a picture: rotate, project, keep the nearest point per cell, shade it. It's the first thing worth clipping.
+
 Read "Basic 3D rotations" on Wikipedia's rotation matrix page, then find those matrices hiding in torust's formula.
 
 - Is the donut's tumble x then z, or z then x? Prove it with one vector.
@@ -73,6 +89,8 @@ Schedule: recap 5 min, read 25, questions 15, build 70, clip and commit 5.
 ## 4. A real library
 
 A clean API, any art in one command, and CI.
+
+Where it fits: Streams 5 and 6 only touch the library through the API you settle here, so this is the stream that makes it reusable.
 
 Read the [API Guidelines checklist](https://rust-lang.github.io/api-guidelines/checklist.html) and Cargo's [features](https://doc.rust-lang.org/cargo/reference/features.html) page, then skim Ratatui's `Widget` trait so `Renderer` fits it later.
 
@@ -90,6 +108,8 @@ Schedule: recap 5 min, read 20, questions 15, build 70, tag and commit 10.
 
 The spin as a widget any Ratatui app can drop in, and a clip worth sharing.
 
+Where it fits: same `frame()` as before, drawn into any Ratatui `Rect` instead of the whole terminal.
+
 Read Ratatui's `Widget` and `StatefulWidget` docs, and how `Buffer` and `Rect` fit together.
 
 - `Widget` or `StatefulWidget`? Where does the angle live between frames?
@@ -105,6 +125,8 @@ Schedule: recap 5 min, read 25, questions 15, build 65, gif and commit 10. Post 
 ## 6. The S on scottyfermo.com
 
 lazy-susan in the browser. Decide where it sits and how big before this one.
+
+Where it fits: same `frame()` again, this time drawn into a web page.
 
 Read how the portfolio animates things today, and MDN on `prefers-reduced-motion`.
 
